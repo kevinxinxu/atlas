@@ -329,8 +329,8 @@ public class ApBuildTask extends DefaultAndroidTask {
             File j2cMap = new File(proguardOut,"j2cmap.data");
             addFile(usageFile, "usage.txt");
             addFile(mappingFile, "mapping.txt");
-            addFile(dexCocoMap,"dexcocomap.data");
-            addFile(j2cMap,"j2cmap.data");
+            addFile(dexCocoMap,"dexcocomap.zip");
+            addFile(j2cMap,"j2cmap.zip");
             addFile(new File(proguardOut, "full-mapping.txt"), "full-mapping.txt");
             addFile(new File(proguardOut, "mapping.data"), "mapping.data");
         } else if (null != appVariantContext.apContext.getApExploredFolder() &&
@@ -338,8 +338,8 @@ public class ApBuildTask extends DefaultAndroidTask {
             File lastApDir = appVariantContext.apContext.getApExploredFolder();
             File usageFile = new File(lastApDir, "usage.txt");
             File mappingFile = new File(lastApDir, "mapping.txt");
-            File dexCocoMap = new File(lastApDir,"dexcocomap.data");
-            File j2cMap = new File(lastApDir,"j2cmap.data");
+            File dexCocoMap = new File(lastApDir,"dexcocomap.zip");
+            File j2cMap = new File(lastApDir,"j2cmap.zip");
             addFile(usageFile, "usage.txt");
             addFile(mappingFile, "mapping.txt");
             addFile(dexCocoMap,"dexcocomap.data");

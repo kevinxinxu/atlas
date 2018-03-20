@@ -240,6 +240,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -342,8 +343,8 @@ public final class Framework {
     static void startup(boolean updated) throws BundleException {
         AtlasBundleInfoManager.instance().getBundleInfo();
         AtlasHotPatchManager.getInstance();
-        notifyFrameworkListeners(0 /* STARTING */, null, null);
-        notifyFrameworkListeners(FrameworkEvent.STARTED, null, null);
+//        notifyFrameworkListeners(0 /* STARTING */, null, null);
+//        notifyFrameworkListeners(FrameworkEvent.STARTED, null, null);
     }
 
     public static ClassLoader getSystemClassLoader() {
@@ -800,7 +801,7 @@ public final class Framework {
      * @param bundle the bundle.
      * @param throwable a throwable.
      */
-    static void notifyFrameworkListeners(final int state, final Bundle bundle, final Throwable throwable) {
+    public static void notifyFrameworkListeners(final int state, final Bundle bundle, final Throwable throwable) {
 
         if (frameworkListeners.isEmpty()) {
             return;
