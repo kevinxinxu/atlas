@@ -324,7 +324,7 @@ public class FrameworkLifecycleHandler implements FrameworkListener {
 //        } catch (Throwable e) {}
 
         if(RuntimeVariables.getProcessName(RuntimeVariables.androidApplication).equals(RuntimeVariables.androidApplication.getPackageName())) {
-            final String autoStartBundle = (String) RuntimeVariables.getFrameworkProperty("autoStartBundles");
+            final String autoStartBundle = "com.taobao.tao.update";
             if (autoStartBundle != null) {
                 new android.os.Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
