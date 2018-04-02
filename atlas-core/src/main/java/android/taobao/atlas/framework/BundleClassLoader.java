@@ -286,7 +286,7 @@ public final class BundleClassLoader extends BaseDexClassLoader {
             } catch (Throwable e) {
                 e.printStackTrace();
             }
-        } else if (Build.VERSION.SDK_INT >= 25) {
+        } else if (Build.VERSION.SDK_INT >= 24) {
             try {
                 Class PatchClassLoaderFactory = Class.forName("com.android.internal.os.PathClassLoaderFactory");
                 Method method = PatchClassLoaderFactory.getDeclaredMethod("createClassloaderNamespace",
