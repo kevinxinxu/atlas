@@ -572,7 +572,6 @@ public class InstrumentationHook extends Instrumentation {
             SharedPreferences settings = RuntimeVariables.androidApplication.getSharedPreferences("com.taobao.tao.welcome.Welcome", Activity.MODE_PRIVATE);
             boolean shouldCreateTrafficPrompt = settings.getBoolean("shouldCreateTrafficPrompt", true);
 
-            try {
                 if (shouldCreateTrafficPrompt && !className.equals("com.taobao.tao.welcome.Welcome")) {
 
                     throw new ClassNotFoundException();
