@@ -224,23 +224,32 @@ import android.taobao.atlas.hack.Interception;
 import android.taobao.atlas.runtime.newcomponent.AdditionalPackageManager;
 import android.taobao.atlas.runtime.newcomponent.AdditionalActivityManagerProxy;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by guanjie on 15/3/30.
  */
 public class ActivityManagerDelegate extends Interception.InterceptionHandler {
 
+    private static Map<Intent,Integer> intents = new ConcurrentHashMap<>();
+
     public static final String TAG = "ActivityManagrHook";
     public static List sIntentHaveProessed = new ArrayList<Intent>();
     @Override
     public Object invoke(Object proxy, final Method method, final Object[] args) throws Throwable {
+
         String name = method.getName();
         if(method.getName().equals("startService")){
             try{
                 final Intent intent = (Intent)args[1];
+                intents.put(intent,1);
                 if(sIntentHaveProessed.contains(intent)){
                     sIntentHaveProessed.remove(intent);
                     return super.invoke(proxy, method, args);
@@ -312,6 +321,7 @@ public class ActivityManagerDelegate extends Interception.InterceptionHandler {
             }catch (Throwable e){}
         }else if(method.getName().equals("stopService")){
             Intent intent = (Intent) args[1];
+            intents.remove(intent);
             if(AdditionalActivityManagerProxy.get().stopService(intent)){
                 return true;
             }
@@ -399,6 +409,16 @@ public class ActivityManagerDelegate extends Interception.InterceptionHandler {
             e.printStackTrace();
             return true;
         }
+
+    }
+
+    public static void stopAllService() {
+            for (Intent intent : intents.keySet()) {
+                boolean flag = RuntimeVariables.androidApplication.stopService(intent);
+                if (intent.getComponent() != null) {
+                    Log.e("ActivityManagerDelegate", "stop service " + intent.getComponent().getClassName() + " " + flag);
+                }
+            }
 
     }
 }
