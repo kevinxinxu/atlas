@@ -217,6 +217,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.pm.ServiceInfo;
 import android.content.res.Resources;
 import android.os.Handler;
@@ -242,6 +244,9 @@ public class ActivityThreadHook implements Handler.Callback{
     private final Handler mActivityThreadHandler;
     private final Object  mActivityThread;
     private List<Message> sDelayServiceMessageList = null;
+
+    private SharedPreferences settings = RuntimeVariables.androidApplication.getSharedPreferences(RuntimeVariables.getLauncherClassName(), Activity.MODE_PRIVATE);
+
 
     public ActivityThreadHook(Object activityThread,Handler h){
         mActivityThread = activityThread;
@@ -270,6 +275,13 @@ public class ActivityThreadHook implements Handler.Callback{
 
     @Override
     public boolean handleMessage(Message msg) {
+        boolean shouldCreateTrafficPrompt = settings.getBoolean("shouldCreateTrafficPrompt", true);
+        if (shouldCreateTrafficPrompt){
+            if (msg.what == 114||msg.what == 113){
+                //如果在没有同意协议之前，启动了service或者broadcastreceiver,discard msg
+                return true;
+            }
+        }
         try {
             ensureLoadedApk();
             if(msg.what == 100){

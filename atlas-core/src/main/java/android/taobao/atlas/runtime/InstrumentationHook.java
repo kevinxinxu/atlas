@@ -560,20 +560,17 @@ public class InstrumentationHook extends Instrumentation {
                                                                                 ClassNotFoundException {
 
         Activity activity = null;
+		String launchActivityName = RuntimeVariables.getLauncherClassName();
         try{
 	        if (intent!=null && intent.getAction()!=null&& intent.getAction().equals("android.intent.action.MAIN")){
 	        	intent.putExtra("android.taobao.atlas.mainAct.wait", false);
 	        }
         }catch (Exception e){
         }
-
         try {
-
-            SharedPreferences settings = RuntimeVariables.androidApplication.getSharedPreferences("com.taobao.tao.welcome.Welcome", Activity.MODE_PRIVATE);
+            SharedPreferences settings = RuntimeVariables.androidApplication.getSharedPreferences(launchActivityName, Activity.MODE_PRIVATE);
             boolean shouldCreateTrafficPrompt = settings.getBoolean("shouldCreateTrafficPrompt", true);
-
-                if (shouldCreateTrafficPrompt && !className.equals("com.taobao.tao.welcome.Welcome")) {
-
+                if (shouldCreateTrafficPrompt && !className.equals(launchActivityName)) {
                     throw new ClassNotFoundException();
 //		mApplicationFake.onFrameworkStartUp();
                 }
@@ -588,12 +585,7 @@ public class InstrumentationHook extends Instrumentation {
 			// }
 			activity = mBase.newActivity(cl, className, intent);
 		} catch (ClassNotFoundException e) {
-			String launchActivityName = "";
-			Intent launchIntentForPackage = RuntimeVariables.androidApplication.getPackageManager().getLaunchIntentForPackage(RuntimeVariables.androidApplication.getPackageName());
-			if (launchIntentForPackage != null) {
-				ComponentName componentName = launchIntentForPackage.resolveActivity(RuntimeVariables.androidApplication.getPackageManager());
-				launchActivityName = componentName.getClassName();
-			}
+
             if (TextUtils.isEmpty(launchActivityName)) {
                 throw e;
             }
